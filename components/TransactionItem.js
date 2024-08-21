@@ -2,10 +2,15 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 export default function TransactionItem({ transaction }) {
+  const amountStyle = [
+    styles.amount,
+    { color: transaction.type === 'Received' ? 'green' : 'red' },
+  ];
+
   return (
     <View style={styles.container}>
       <Text style={styles.type}>{transaction.type}</Text>
-      <Text style={styles.amount}>{transaction.amount} ckBTC</Text>
+      <Text style={amountStyle}>{transaction.amount}</Text>
       <Text style={styles.date}>{transaction.date}</Text>
     </View>
   );
@@ -30,7 +35,7 @@ const styles = StyleSheet.create({
   },
   amount: {
     fontSize: 16,
-    color: '#4CAF50',
+    fontWeight: 'bold',
   },
   date: {
     fontSize: 14,

@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, FlatList } from 'react-native';
+import TransactionItem from '../components/TransactionItem';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faMoneyBillTransfer, faMoneyCheckAlt } from '@fortawesome/free-solid-svg-icons';
 
 export default function BalanceScreen() {
   const [balance, setBalance] = useState(0);
   const [yearsWorked, setYearsWorked] = useState(5); // Example data
   const [transactions, setTransactions] = useState([
-    { id: '1', type: 'Received', amount: '50 ckBTC',date:'10-10-2024'  },
-    { id: '2', type: 'Widthdrawn', amount: '10 ckBTC',date:'10-10-2024'},
-    { id: '3', type: 'Widthdrawn', amount: '20 ckBTC',date:'10-10-2024'},
+    { id: '1', type: 'Received', amount: '50 ckBTC', date: '10-10-2024' },
+    { id: '2', type: 'Withdrawn', amount: '10 ckBTC', date: '10-10-2024' },
+    { id: '3', type: 'Withdrawn', amount: '20 ckBTC', date: '10-10-2024' },
+    { id: '4', type: 'Received', amount: '50 ckBTC', date: '10-10-2024' },
+    { id: '5', type: 'Withdrawn', amount: '10 ckBTC', date: '10-10-2024' },
   ]);
+  const [nextPay, setNextPay] = useState('');
+  const [nextPayAmount, setNextPayAmount] = useState('100 ckBTC');
 
   useEffect(() => {
     // Fetch ckBTC balance from API
@@ -16,8 +23,10 @@ export default function BalanceScreen() {
     //   .then(response => setBalance(response.data.balance))
     //   .catch(error => console.error(error));
     setBalance(100); // Example data
+    setNextPay('10-10-2024'); // Example data
+    setNextPayAmount('100 ckBTC'); // Example data
   }, []);
-
+ 
   const handleWithdraw = () => {
     // Handle withdraw action
     console.log('Withdraw button pressed');
@@ -43,25 +52,33 @@ export default function BalanceScreen() {
             <Text style={styles.balance}>{yearsWorked} years</Text>
           </View>
         </View>
-        <Pressable onPress={handleWithdraw} style={styles.withdrawButton}>
-          <Text style={styles.withdrawButtonText}>Withdraw</Text>
-        </Pressable>
         <View style={styles.transactionsContainer}>
           <Text style={styles.transactionsTitle}>Recent Transactions</Text>
           <FlatList
             data={transactions}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-              <View style={styles.transactionItem}>
-                <Text style={styles.transactionType}>{item.type}</Text>
-                <Text style={styles.transactionAmount}>{item.amount}</Text>
-                <Text style={styles.transactionAmount}>{item.date}</Text>
-              </View>
+              <TransactionItem transaction={item} />
             )}
           />
-        </View>
+          </View>
+        <View style={{width:'100%',height:'20%',position:'relative',top:'1%',display:'flex',flexDirection:'row',}}>
+          <View style={styles.card}>
+             <Text style={styles.title}>Next Pay</Text>
+             <Text style={styles.balance}>{nextPay}</Text>
+          </View>
+          <View style={styles.card}>
+             <Text style={styles.title}>Amount</Text>
+             <Text style={styles.balance}>{nextPayAmount}</Text>
+          </View>
       </View>
-    </View>
+          <Pressable style={styles.withdrawButton} onPress={handleWithdraw}>
+            <FontAwesomeIcon icon={faMoneyBillTransfer} color="white" size={20} />
+            <Text style={styles.withdrawButtonText}>Withdraw</Text>
+          </Pressable>
+      </View>
+      </View>
+    
   );
 }
 
@@ -117,10 +134,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     borderRadius: 5,
     marginBottom: 20,
+    marginTop: '15%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    
   },
   withdrawButtonText: {
     color: 'white',
     fontSize: 18,
+    marginLeft: 15,
   },
   transactionsContainer: {
     width: '90%',
@@ -129,20 +152,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 10,
     color: '#2E86C7',
-  },
-  transactionItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-  },
-  transactionType: {
-    fontSize: 16,
-    color: '#333',
-  },
-  transactionAmount: {
-    fontSize: 16,
-    color: '#333',
   },
 });

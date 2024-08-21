@@ -7,7 +7,7 @@ import BalanceScreen from './screens/BalanceScreen';
 import DeductionsScreen from './screens/DeductionsScreen';
 import PaymentsScreen from './screens/PaymentsScreen';
 import { faWallet, faMoneyBill, faHistory } from '@fortawesome/free-solid-svg-icons';
-
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';    
 
 // Create the Stack Navigator
 const Stack = createStackNavigator();
@@ -30,7 +30,7 @@ function MainTabs() {
             icon = faHistory;
           }
 
-          return <FontAwesomeIcon icon={icon} color={color} size={size} />;
+          return (<FontAwesomeIcon icon={icon} color={color} size={size} />);
         },
         headerShown: false,
       })}>
